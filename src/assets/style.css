@@ -447,9 +447,9 @@ main h2.tip-title {
 }
 
 .share-button::after {
-  content: "";
+  content: '';
   margin-left: 0.25rem;
-  background-image: url("data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGRhdGEtbmFtZT0iTGF5ZXIgMSIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHg9IjBweCIgeT0iMHB4Ij48dGl0bGU+QXJ0Ym9hcmQgNDwvdGl0bGU+PGc+PHBhdGggZD0iTTM0LDc4SDY2QTEyLDEyLDAsMCwwLDc4LDY2VjU0SDcwVjY2YTQsNCwwLDAsMS00LDRIMzRhNCw0LDAsMCwxLTQtNFYzNGE0LDQsMCwwLDEsNC00SDQ2VjIySDM0QTEyLDEyLDAsMCwwLDIyLDM0VjY2QTEyLDEyLDAsMCwwLDM0LDc4WiI+PC9wYXRoPjxwYXRoIGQ9Ik00Mi4zNCw1Miw0OCw1Ny42NmwyMi0yMlY0Nmg4VjI2YTQsNCwwLDAsMC00LTRINTR2OEg2NC4zNFoiPjwvcGF0aD48L2c+PC9zdmc+");
+  background-image: url('data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9JzMwMHB4JyB3aWR0aD0nMzAwcHgnICBmaWxsPSIjMDAwMDAwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGRhdGEtbmFtZT0iTGF5ZXIgMSIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHg9IjBweCIgeT0iMHB4Ij48dGl0bGU+QXJ0Ym9hcmQgNDwvdGl0bGU+PGc+PHBhdGggZD0iTTM0LDc4SDY2QTEyLDEyLDAsMCwwLDc4LDY2VjU0SDcwVjY2YTQsNCwwLDAsMS00LDRIMzRhNCw0LDAsMCwxLTQtNFYzNGE0LDQsMCwwLDEsNC00SDQ2VjIySDM0QTEyLDEyLDAsMCwwLDIyLDM0VjY2QTEyLDEyLDAsMCwwLDM0LDc4WiI+PC9wYXRoPjxwYXRoIGQ9Ik00Mi4zNCw1Miw0OCw1Ny42NmwyMi0yMlY0Nmg4VjI2YTQsNCwwLDAsMC00LTRINTR2OEg2NC4zNFoiPjwvcGF0aD48L2c+PC9zdmc+');
   display: inline-block;
   width: 17px;
   aspect-ratio: 1 / 1;
@@ -509,7 +509,7 @@ pre {
 }
 
 .tip-footer .last-edit::before {
-  content: " - ";
+  content: ' - ';
 }
 
 /* List of tags and browsers */
@@ -593,7 +593,7 @@ footer a {
   contain: layout;
 }
 .lightbox-button::after {
-  content: "";
+  content: '';
   width: 2%;
   aspect-ratio: 1;
   display: block;
@@ -603,8 +603,7 @@ footer a {
   padding: 3%;
   border-radius: 20%;
   background-origin: padding-box;
-  background: var(--accent-color-lighter) url(/assets/zoom.svg) no-repeat
-    center/80%;
+  background: var(--accent-color-lighter) url(/assets/zoom.svg) no-repeat center/80%;
   z-index: 1;
   transition: 0.25s ease-in-out background;
 }
@@ -624,42 +623,40 @@ footer a {
 
 @media (prefers-reduced-motion: no-preference) {
   .lightbox {
-    animation: show 0.25s ease-in-out normal;
+    opacity: 0;
+    animation: show 0.25s ease-in-out normal forwards;
   }
+
   @keyframes show {
-    from {
-      opacity: 0;
-    }
     to {
       opacity: 1;
     }
   }
 
   @supports selector(::view-transition) {
-    .lightbox {
-      animation-duration: 0s;
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.25s;
+    }
+    ::view-transition-group(image) {
+      animation-duration: 0.5s;
+    }
+    ::view-transition-group(image) {
+      animation-duration: 0.5s;
     }
   }
+}
 
-  ::view-transition-group(backdrop) {
-    animation-duration: 0.25s;
-    z-index: 1;
-  }
-  ::view-transition-group(image) {
-    animation-duration: 0.5s;
-    z-index: 3;
-  }
+::view-transition-group(button) {
+  animation-delay: 0.5s;
+  animation-duration: 0.25s;
+  z-index: 4;
+}
 
-  ::view-transition-group(button) {
-    animation-delay: 0.5s;
-    animation-duration: 0.25s;
-    z-index: 4;
-  }
-
-  ::view-transition-group(dialog) {
-    animation-duration: 0.5s;
-    z-index: 2;
-  }
+::view-transition-group(button) {
+  animation-delay: 0.5s;
+  animation-duration: 0.25s;
+  z-index: 4;
 }
 
 :root:has(.lightbox[open]) {
@@ -668,8 +665,6 @@ footer a {
 
 .lightbox::backdrop {
   background: var(--lightbox-backdrop);
-  view-transition-name: backdrop;
-  contain: layout;
 }
 
 .lightbox form {
@@ -678,23 +673,21 @@ footer a {
   border-radius: 5px;
   padding: 1rem 1rem 0;
   grid-template-rows: 0 1fr min-content;
-  view-transition-name: dialog;
-  contain: layout;
 }
 
 .lightbox img {
-  view-transition-name: image;
-  contain: layout;
   width: auto;
   max-width: 100%;
+  contain: layout;
 }
 
 .lightbox form > span {
   background: var(--alternate-background-color);
   position: sticky;
   bottom: 0rem;
-  width: auto;
   padding: 1rem 0;
+  /* Max width on this span sort of fixes the dialog width */
+  max-width: 60ch;
 }
 
 .lightbox button {
@@ -716,8 +709,8 @@ footer a {
   color: var(--accent-color-darker);
   transition: 0.25s ease-in-out background;
   z-index: 1;
-  view-transition-name: button;
   contain: layout;
+  view-transition-name: button;
 }
 .lightbox button:hover {
   background-color: var(--accent-color);

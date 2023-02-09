@@ -20,46 +20,49 @@ function createDialogs(selector) {
       <span aria-hidden></span>
     </form>
   `;
-
+  
   function createDialog(img) {
     const button = buttonTemplate.cloneNode();
     const dialog = dialogTemplate.cloneNode(true);
     const form = dialog.querySelector("form");
     const span = dialog.querySelector("form > span");
-
-    span.before(img.cloneNode());
+    
     span.textContent = img.getAttribute("alt");
     img.before(button);
     button.append(img);
     button.after(dialog);
-
-    const showDialog = () => {
-      if (dialog.open) {
-        dialog.close();
-      } else {
-        img.style.viewTransitionName = "";
-        dialog.style.setProperty("width", img.naturalWidth + "px");
+    
+    img.style.viewTransitionName = 'image';
+    
+    const moveImage = () => {
+      if (!dialog.open) {
+        span.before(img);
         dialog.showModal();
+      } else {
+        button.append(img);
+        dialog.close();
       }
+    }
+    const toggleDialog = () => {
+      // This causes weirdness
+      // dialog.style.setProperty("width", img.naturalWidth + "px");
+      if (document.startViewTransition) {
+        document.startViewTransition(() => moveImage());
+      } else moveImage();
     };
 
-    button.addEventListener("click", () => {
-      if (!document.startViewTransition) {
-        showDialog();
-        return;
-      }
-      img.style.viewTransitionName = "image";
-      document.startViewTransition(() => showDialog());
-    });
+    button.addEventListener("click", () => toggleDialog());
 
     dialog.addEventListener("click", (event) => {
+      // This bit is still a little funky
+      event.preventDefault()
       if (event.target === dialog) {
         if (!document.startViewTransition) {
-          showDialog();
+          toggleDialog();
           return;
         }
-        document.startViewTransition(() => showDialog());
       }
+      toggleDialog();
     });
   }
 
